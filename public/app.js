@@ -2,7 +2,7 @@ const formulario = document.getElementById('formulario');
 const selector = document.getElementById('hora');
 const mensaje = document.getElementById('mensaje');
 const lista = document.getElementById('lista');
- 
+
 async function cargar() {
   const respuesta = await fetch('/api/turnos');
   const { turnos, libres } = await respuesta.json();
@@ -15,7 +15,7 @@ async function cargar() {
     })
   );
 }
- 
+
 formulario.addEventListener('submit', async (evento) => {
   evento.preventDefault();
   const respuesta = await fetch('/api/turnos', {
@@ -24,8 +24,11 @@ formulario.addEventListener('submit', async (evento) => {
     body: JSON.stringify({ nombre: document.getElementById('nombre').value, hora: selector.value }),
   });
   const datos = await respuesta.json();
-  mensaje.textContent = datos.ok ? `Turno confirmado para las ${datos.turno.hora}` : datos.error;
+  mensaje.textContent = datos.ok
+    ? `Turno confirmado para las ${datos.turno.hora}. Código: ${datos.turno.codigo}`
+    : datos.error;
+
   cargar();
 });
- 
+
 cargar();
