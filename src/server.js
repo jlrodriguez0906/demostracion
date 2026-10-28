@@ -43,6 +43,13 @@ const servidor = http.createServer(async (req, res) => {
         const resultado = turnos.reservar(nombre, hora);
         return responderJson(res, resultado.ok ? 201 : 400, resultado);
     }
+
+    const coincidencia = req.method === 'DELETE' && req.url.match(/^\/api\/turnos\/(\d+)$/);
+    if (coincidencia) {
+        const resultado = turnos.cancelar(Number(coincidencia[1]));
+        return responderJson(res, resultado.ok ? 200 : 404, resultado);
+    }
+
     responderJson(res, 404, { ok: false, error: 'No encontrado' });
 });
 
