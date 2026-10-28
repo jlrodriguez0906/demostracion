@@ -10,10 +10,18 @@ async function cargar() {
   lista.replaceChildren(
     ...turnos.map((t) => {
       const item = document.createElement('li');
-      item.textContent = `${t.hora} · ${t.nombre}`;
+      item.textContent = `${t.hora} · ${t.nombre} `;
+      const boton = document.createElement('button');
+      boton.textContent = 'Cancelar';
+      boton.addEventListener('click', async () => {
+        await fetch(`/api/turnos/${t.id}`, { method: 'DELETE' });
+        cargar();
+      });
+      item.appendChild(boton);
       return item;
     })
   );
+
 }
 
 formulario.addEventListener('submit', async (evento) => {
